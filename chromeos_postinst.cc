@@ -279,8 +279,13 @@ bool RunPostInstall(const string& install_dir,
   string tag_file = install_dir + "/root/.force_update_firmware";
   bool firmware_update = (access(tag_file.c_str(), 0) == 0);
 
-  return ChromeosChrootPostinst(install_dir,
-                                src_version,
-                                firmware_update,
-                                install_dev);
+  bool success = ChromeosChrootPostinst(install_dir,
+                                        src_version,
+                                        firmware_update,
+                                        install_dev);
+
+  printf("Syncing filesystem at end of postinst...\n");
+  sync();
+
+  return success;
 }
