@@ -181,10 +181,7 @@ install_gpt() {
   local max_reserved_sectors=131072   # 64MiB
   local max_esp_sectors=32768         # 16MiB
   local max_rwfw_sectors=16384        # 8MiB
-  local min_stateful_sectors=262144   # 128MiB
-  # TODO(dparker): Remove this hack from the factory branch once
-  # there is a proper fix for crosbug.com/p/10721
-  local max_stateful_sectors=$((32 * 1024 * 1024 * 1024 / 512))   # 32GB
+  local min_stateful_sectors=262144   # 128MiB, expands to fill available space
 
   local num_pmbr_sectors=1
   local num_gpt_hdr_sectors=1
@@ -254,12 +251,6 @@ install_gpt() {
     local num_rootfs_b_sectors=$NUM_ROOTFS_SECTORS
 
     NUM_STATEFUL_SECTORS=$(($START_ROOTFS_B - $START_STATEFUL))
-    # TODO(dparker): Remove this hack from the factory branch once
-    # there is a proper fix for crosbug.com/p/10721
-    if [ "$NUM_STATEFUL_SECTORS" -gt "$max_stateful_sectors" ]; then
-      NUM_STATEFUL_SECTORS=$max_stateful_sectors
-    fi
-
   else
     # Just a local file.
     local sudo=
