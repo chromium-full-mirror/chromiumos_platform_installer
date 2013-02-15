@@ -436,6 +436,10 @@ if [ "$FLAGS_skip_vblock" -eq "$FLAGS_FALSE" ]; then
 fi
 
 echo "Copying rootfs..."
+
+echo "Failed to copy rootfs -- bad alignment."
+exit 1
+
 # We can no longer update the label on the rootfs because that changes bits
 # that will break both the delta updater and verified boot.  We must do a
 # straight copy now.  The GPT labels and UUIDs are the only mutable naming
